@@ -1,12 +1,12 @@
-## Introduction 
+== Introduction 
 
-*2 MINUTES PRACTICE*
+_2 MINUTES PRACTICE_
 
 In this workshop you will learn how to develop and deploy a microservices based application. 
 
 The overall architecture of the application that you will deploy is the following:
 
-![API Gateway Pattern]({% image_path coolstore-arch.png %}){:width="400px"}
+image:{% image_path coolstore-arch.png %}[API Gateway Pattern, 400]
 
 During the various steps of the the workshop you will use CodeReady Workspaces, an online IDE that is running on Red Hat OpenShift to write, test and deploy:
 

@@ -6,13 +6,15 @@ In this lab you will learn about Spring Boot and how you can build microservices
 using Spring Boot and JBoss technologies. During this lab, you will create a REST API for 
 the Catalog service in order to provide a list of products for the CoolStore online shop.
 
-![CoolStore Architecture]({% image_path coolstore-arch-catalog-spring-boot.png %}){:width="400px"}
+image:{% image_path coolstore-arch-catalog-spring-boot.png %}[CoolStore Architecture,400]
 
 #### What is Spring Boot?
 
+image:{% image_path spring-boot-logo.png %}[Spring Boot, 400]
+
 Spring Boot is an opinionated framework that makes it easy to create stand-alone Spring based 
 applications with embedded web containers such as Tomcat (or JBoss Web Server), Jetty and Undertow 
-that you can run directly on the JVM using `java -jar`. Spring Boot also allows producing a war 
+that you can run directly on the JVM using `*java -jar`. Spring Boot also allows producing a war 
 file that can be deployed on stand-alone web containers.
 
 The opinionated approach means many choices about Spring platform and third-party libraries 
@@ -23,11 +25,10 @@ are already made by Spring Boot so that you can get started with minimum effort 
 The **catalog-spring-boot** project has the following structure which shows the components of 
 the Spring Boot project laid out in different subdirectories according to Maven best practices:
 
-
 Once loaded, you should see the following files and be able to navigate amongst the files. The 
 components of the Spring Boot project are laid out in different subdirectories according to Maven best practices:
 
-![Catalog Project]({% image_path springboot-catalog-project.png %}){:width="300px"}
+image:{% image_path springboot-catalog-project.png %}[Catalog Project,300]
 
 This is a minimal Spring Boot project with support for RESTful services and Spring Data with JPA for connecting
 to a database. This project currently contains no code other than the main class, ***CatalogApplication***
@@ -35,7 +36,9 @@ which is there to bootstrap the Spring Boot application.
 
 Examine ***com/redhat/cloudnative/catalog/CatalogApplication.java*** in the **src/main** directory:
 
-~~~java
+[source,java]
+.CatalogApplication.java
+----
 package com.redhat.cloudnative.catalog;
 
 import org.springframework.boot.SpringApplication;
@@ -48,7 +51,7 @@ public class CatalogApplication {
         SpringApplication.run(CatalogApplication.class, args);
     }
 }
-~~~
+----
 
 The database is configured using the Spring application configuration file which is located at 
 **src/main/resources/application.properties**. Examine this file to see the database connection details 
@@ -61,35 +64,38 @@ in the build logs, otherwise the build has failed.
 To build and deploy the **Catalog Service** on OpenShift using the *fabric8* maven plugin, 
 which is already configured in CodeReady Workspaces, 
 
-In CodeReady Workspaces, `right click on catalog-spring-boot` project in the project explorer then, `click on Commands > Build > build`
+In CodeReady Workspaces, `*right click on 'catalog-spring-boot'*` project in the project explorer then, `*click on 'Commands > Build > build'*`
 
-![Maven Build]({% image_path codeready-commands-build.png %}){:width="600px"}
+image:{% image_path codeready-commands-build.png %}[Maven Build,600]
 
 Once successfully built, the resulting ***jar*** is located in the **target/** directory:
 
-~~~shell
+----
 $ ls labs/catalog-spring-boot/target/*.jar
 
 labs/catalog-spring-boot/target/catalog-1.0-SNAPSHOT.jar
-~~~
+----
 
 This is an uber-jar with all the dependencies required packaged in the ***jar*** to enable running the 
-application with `java -jar`.
+application with `*java -jar`.
 
 Now that the project is ready, let's get coding and create a domain model, data repository, and a  
 RESTful endpoint to create the Catalog service:
 
-![Catalog RESTful Service]({% image_path springboot-catalog-arch.png %}){:width="640px"}
+image:{% image_path springboot-catalog-arch.png %}[Catalog RESTful Service,640]
 
 #### Create the Domain Model
 
 Create a new Java class named ***Product*** in the ***com.redhat.cloudnative.catalog*** package with the below code and 
 following fields: ***itemId*** ***name*** ***desc*** and ***price***
 
-In the project explorer in CodeReady Workspaces, `right-click on catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog` and then `click on New > Java Class`. `Enter 'Product'` as the Java class name.
+In the project explorer in CodeReady Workspaces, 
+`*right-click on 'catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog'*`
+then `*click on 'New > Java Class'*`. `*Enter 'Product'*` as the Java class name.
 
-
-~~~java
+[source,java]
+.Product.java
+----
 package com.redhat.cloudnative.catalog;
 
 import java.io.Serializable;
@@ -152,7 +158,7 @@ public class Product implements Serializable {
     return "Product [itemId=" + itemId + ", name=" + name + ", price=" + price + "]";
   }
 }
-~~~
+----
 
 Review the ***Product*** domain model and note the JPA annotations on this class. ***@Entity*** marks the 
 class as a JPA entity, ***@Table*** customizes the table creation process by defining a table 
@@ -162,37 +168,42 @@ name and database constraint and ***@Id*** marks the primary key for the table
 
 Spring Data repository abstraction simplifies dealing with data models in Spring applications by 
 reducing the amount of boilerplate code required to implement data access layers for various 
-persistence stores. [Repository and its sub-interfaces](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.core-concepts) 
+persistence stores. https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.core-concepts[Repository and its sub-interfaces^] 
 are the central concept in Spring Data which is a marker interface to provide 
 data manipulation functionality for the entity class that is being managed. When the application starts, 
 Spring finds all interfaces marked as repositories and for each interface found, the infrastructure 
 configures the required persistent technologies and provides an implementation for the repository interface.
 
-Create a new Java interface named ***ProductRepository*** in ***com.redhat.cloudnative.catalog*** package 
-and extend [CrudRepository](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) interface in order to indicate to Spring that you want to expose a complete set of methods to manipulate the entity.
+Create a new Java interface named *_ProductRepository_* in ***com.redhat.cloudnative.catalog*** package 
+and extend https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html[CrudRepository^] interface in order to indicate to Spring that you want to expose a complete set of methods to manipulate the entity.
 
-In the project explorer in CodeReady Workspaces, `right-click on catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog` and then `click on New > Java Class` and paste the following code:
+In the project explorer in CodeReady Workspaces, `*right-click on 'catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog'*` 
+then `*click on 'New > Java Class*` and paste the following code:
 
-
-~~~java
+[source,java]
+.ProductRepository.java
+----
 package com.redhat.cloudnative.catalog;
 
 import org.springframework.data.repository.CrudRepository;
 
 public interface ProductRepository extends CrudRepository<Product, String> {
 }
-~~~
+----
 
-That's it! Now that you have a domain model and a repository to retrieve the domain model, let's create a RESTful service that returns the list of products.
+That's it! Now that you have a domain model and a repository to retrieve the domain model, 
+let's create a RESTful service that returns the list of products.
 
 #### Create a RESTful Service
 
 Spring Boot uses Spring Web MVC as the default RESTful stack in Spring applications. Create 
 a new Java class named ***CatalogController*** in ***com.redhat.cloudnative.catalog*** package with 
-the following content by `right-clicking on catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog` and 
-then `click on New > Java Class`:
+the following content by `*right-clicking on 'catalog-spring-boot/src/main/java/com.redhat.cloudnative.catalog'*` and 
+then `*click on 'New > Java Class'*`:
 
-~~~java
+[source,java]
+.CatalogController.java
+----
 package com.redhat.cloudnative.catalog;
 
 import java.util.*;
@@ -215,71 +226,75 @@ public class CatalogController {
         return StreamSupport.stream(products, false).collect(Collectors.toList());
     }
 }
-~~~
+----
 
 The above REST service defines an endpoint that is accessible via **HTTP GET** at **/api/catalog**. Notice 
 the **repository** field on the controller class which is used to retrieve the list of products. Spring Boot 
 automatically provides an implementation for ***ProductRepository*** at runtime and 
-[injects it into the controller using the ***@Autowire*** annotation](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html).
+https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html[injects it into the controller using the ***@Autowire*** annotation^].
 
-Build and package the ***Catalog Service*** using Maven by `right clicking on catalog-spring-boot` project in the project explorer then, `click on Commands > Build > build`
+Build and package the ***Catalog Service*** using Maven by `*right clicking on 'catalog-spring-boot'*` project in the project explorer then, `*click on 'Commands > Build > build'*`
 
-![Maven Build]({% image_path codeready-commands-build.png %}){:width="600px"}
+image:{% image_path codeready-commands-build.png %}[Maven Build,600]
 
 Using Spring Boot maven plugin, you can conveniently run the application in CodeReady Workspaces and 
-test the endpoint. In CodeReady Workspaces, `click on the run icon and then on 'spring-boot:run'`. 
+test the endpoint. In CodeReady Workspaces, `*click on the run icon and then on 'spring-boot:run'*`. 
 
-![Run Icon - Spring Boot]({% image_path run-icon-springboot.png %}){:width="200px"}
+image:{% image_path run-icon-springboot.png %}[Run Icon - Spring Boot,200]
 
-> You can also run the inventory service in CodeReady Workspaces using the commands palette and then **RUN > spring-boot:run**
+TIP: You can also run the inventory service in CodeReady Workspaces using the *_Commands Palette_* and then **RUN > spring-boot:run**
  
 When you see **Started CatalogApplication** in the logs, you can access the 
-Catalog REST API. Let’s test it out using `curl` in a new terminal window:
+Catalog REST API. Let’s test it out using `*curl*` in a new terminal window:
 
-~~~shell
+----
 $ curl http://localhost:9000/api/catalog
 
 [{"itemId":"329299","name":"Red Fedora","desc":"Official Red Hat Fedora","price":34.99},...]
-~~~
+----
 
 You can also use the preview url that CodeReady Workspaces has generated for you to be able to test service 
 directly in the browser. Append the path **/api/catalog** at the end of the preview url and try 
 it in your browser in a new tab.
 
-![Preview URL]({% image_path springboot-che-preview-browser.png %}){:width="900px"}
+image:{% image_path springboot-che-preview-browser.png %}[Preview URL,900]
 
 The REST API returned a JSON object representing the product list. Congratulations!
 
-Stop the Inventory service by `clicking on the stop icon` near **run spring-boot** in the **Machines** window.
+Stop the Inventory service by `*clicking on the stop icon*` near **run spring-boot** in the **Machines** window.
 
-![Stop Icon - Spring Boot]({% image_path springboot-che-stop.png %}){:width="200px"}
+image:{% image_path springboot-che-stop.png %}[Stop Icon - Spring Boot,200]
 
 
 #### Deploy Spring Boot on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 
-OpenShift [Source-to-Image (S2I)]({{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#source-build) 
+OpenShift {{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#source-build[Source-to-Image (S2I)^] 
 feature can be used to build a container image from your project. OpenShift 
-S2I uses the [supported OpenJDK container image](https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift) to build the final container image 
+S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container image 
 of the **Catalog Service** by uploading the Spring Boot uber-jar from the **target/** 
 folder to the OpenShift platform. 
 
-Maven projects can use the [Fabric8 Maven Plugin](https://maven.fabric8.io) in order to use OpenShift S2I for building 
+Maven projects can use the https://maven.fabric8.io[Fabric8 Maven Plugin^] in order to use OpenShift S2I for building 
 the container image of the application from within the project. This maven plugin is a Kubernetes/OpenShift client 
 able to communicate with the OpenShift platform using the REST endpoints in order to issue the commands 
 allowing to build a project, deploy it and finally launch a docker process as a pod.
 
 To build and deploy the **Catalog Service** on OpenShift using the *fabric8* maven plugin, 
-which is already configured in CodeReady Workspaces, `right click on catalog-spring-boot` project in the project explorer then, `click on Commands > Deploy > fabric8:deploy`
+which is already configured in CodeReady Workspaces, `*right click on catalog-spring-boot*` project in the project explorer then, `*click on Commands > Deploy > fabric8:deploy`
 
-![Fabric8 Deploy]({% image_path codeready-commands-deploy.png %}){:width="600px"}
+image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
 
-`fabric8:deploy` will cause the following to happen:
+[TIP]
+.fabric8:deploy
+====
+It will cause the following to happen:
 
 * The Catalog uber-jar is built using Spring Boot
 * A container image is built on OpenShift containing the Catalog uber-jar and JDK
 * All necessary objects are created within the OpenShift project to deploy the Catalog service
+====
 
 Once this completes, your project should be up and running. OpenShift runs the different components of 
 the project in one or more pods which are the unit of runtime deployment and consists of the running 
@@ -301,41 +316,40 @@ or IP).
 * **Route**: *catalog* route registers the service on the built-in external load-balancer 
 and assigns a public DNS name to it so that it can be reached from outside OpenShift cluster.
 
-You can review the above resources in the [OpenShift Web Console]({{OPENSHIFT_CONSOLE_URL}}) or using `oc describe` command:
+You can review the above resources in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] or using `*oc describe*` command:
 
-> ***bc*** is the short-form of ***buildconfig*** and can be interchangeably used instead of it with the 
-> OpenShift CLI. The same goes for ***is*** instead of ***imagestream***, ***dc*** instead of ***deploymentconfig*** 
-> and ***svc*** instead of ***service***.
+TIP: **bc** is the short-form of **buildconfig** and can be interchangeably used instead of it with the 
+OpenShift CLI. The same goes for **is** instead of **imagestream**, **dc** instead of **deploymentconfig** 
+and **svc** instead of **service**.
 
-~~~shell
+----
 $ oc describe bc catalog-s2i
 $ oc describe is catalog
 $ oc describe dc catalog
 $ oc describe svc catalog
 $ oc describe route catalog
-~~~
+----
 
-You can see the expose DNS url for the ***Catalog Service*** in the [OpenShift Web Console]({{OPENSHIFT_CONSOLE_URL}}) or using 
+You can see the expose DNS url for the ***Catalog Service*** in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] or using 
 OpenShift CLI.
 
-~~~shell
+----
 $ oc get routes
 
 NAME        HOST/PORT                                       PATH        SERVICES        PORT        TERMINATION   
 catalog     catalog-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      catalog         8080        None
 inventory   inventory-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
-~~~
+----
 
-> The route urls in your project would be different from the ones in this lab guide!
+`*Click on the OpenShift Route of _'Catalog Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].
 
-`Click on the Catalog Route` in the [OpenShift Web Console]({{OPENSHIFT_CONSOLE_URL}}).
+image:{% image_path catalog-service.png %}[Catalog Service,500]
 
-![Catalog Service]({% image_path catalog-service.png %}){:width="500px"}
+Then `*click on 'Test it'*`. You should have the following output:
 
-Then `click on 'Test it'`. You should have the following output:
-
-~~~shell
+[source,json]
+----
 [{"itemId":"329299","name":"Red Fedora","desc":"Official Red Hat Fedora","price":34.99},...]
-~~~
+----
 
 Well done! You are ready to move on to the next lab.

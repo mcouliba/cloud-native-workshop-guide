@@ -17,15 +17,15 @@ ourselves are in love with CodeReady Workspaces and highly recommend it.
 
 Follow these instructions to setup the development environment on CodeReady Workspaces. 
 
-You might be familiar with the Eclipse IDE which is one of the most popular IDEs for Java and other programming languages. Built on the open [Eclipse Che](https://www.eclipse.org/che/) project, [CodeReady Workspaces](https://developers.redhat.com/products/codeready-workspaces/overview/) is the next-generation Eclipse IDE which provides developer workspaces, which include all the tools and the dependencies that are needed to code, build, test, run, and debug applications. This full-featured web-based IDE runs in an OpenShift cluster hosted on-premises or in the cloud and eliminates the need to install anything on a local machine.You have a CodeReady Workspaces instance deployed on your OpenShift cluster which you will use during these labs.
+You might be familiar with the Eclipse IDE which is one of the most popular IDEs for Java and other programming languages. Built on the open https://developers.redhat.com/products/codeready-workspaces/overview/[Eclipse Che](https://www.eclipse.org/che/) project, [CodeReady Workspaces^] is the next-generation Eclipse IDE which provides developer workspaces, which include all the tools and the dependencies that are needed to code, build, test, run, and debug applications. This full-featured web-based IDE runs in an OpenShift cluster hosted on-premises or in the cloud and eliminates the need to install anything on a local machine.You have a CodeReady Workspaces instance deployed on your OpenShift cluster which you will use during these labs.
 
-Launch a browser and navigate to [CodeReady Workspaces]({{ CODEREADY_WORKSPACES_URL }}) ({{ CODEREADY_WORKSPACES_URL }}) in order to configure your development workspace
+Launch a browser and navigate to {{ CODEREADY_WORKSPACES_URL }}) ({{ CODEREADY_WORKSPACES_URL }}[CodeReady Workspaces^] in order to configure your development workspace
 
 #### Registering to CodeReady Workspaces
-First, you need to register as a user. `Register` and choose the same username and password as 
+First, you need to register as a user. `*Register*` and choose the same username and password as 
 your OpenShift credentials.
 
-![CodeReady Workspaces - Register]({% image_path codeready-register.png %}){:width="500px"}
+image:{% image_path codeready-register.png %}[CodeReady Workspaces - Register,500]
 
 #### Creating a Workspace
 Log into CodeReady Workspaces with your user. You can now create your workspace based on a stack. A 
@@ -35,32 +35,32 @@ on-demand.
 
 For this lab, click on the **Java Cloud-Native** stack and then on the **Create** button. 
 
-![CodeReady Workspaces - Workspace]({% image_path codeready-create-workspace.png %}){:width="1000px"}
+image:{% image_path codeready-create-workspace.png %}[CodeReady Workspaces - Workspace,1000]
 
 Click on **OPEN** to open and to start the workspace.
 
-![CodeReady Workspaces - Workspace]({% image_path codeready-start-workspace.png %}){:width="1000px"}
+image:{% image_path codeready-start-workspace.png %}[CodeReady Workspaces - Workspace,1000]
 
 It takes a little while for the workspace to be ready. When it's ready, you will see a fully functional CodeReady Workspaces IDE running in your browser.
 
-![CodeReady Workspaces - Workspace]({% image_path codeready-workspace.png %}){:width="1000px"}
+image:{% image_path codeready-workspace.png %}[CodeReady Workspaces - Workspace,1000]
 
 #### Importing the lab project
 Now you can import the project skeletons into your workspace.
 
 In the project explorer pane, click on the **Import Project...** and enter the following:
 
-  * Type: `ZIP`
-  * URL: `{{LABS_DOWNLOAD_URL}}`
-  * Name: `labs`
+  * Type: `*ZIP`
+  * URL: `*{{LABS_DOWNLOAD_URL}}`
+  * Name: `*labs`
   * Check **Skip the root folder of the archive**
 
-![CodeReady Workspaces - Import Project]({% image_path codeready-import.png %}){:width="500px"}
+image:{% image_path codeready-import.png %}[CodeReady Workspaces - Import Project,500]
 
 Click on **Import**. Make sure you choose the **Blank** project configuration since the zip file contains multiple 
 project skeletons. Click on **Save**
 
-![CodeReady Workspaces - Import Project]({% image_path codeready-import-save.png %}){:width="500px"}
+image:{% image_path codeready-import-save.png %}[CodeReady Workspaces - Import Project,500]
 
 #### Converting your project skeletons
 The projects are imported now into your workspace and is visible in the project explorer.
@@ -70,42 +70,42 @@ enable these capabilities, let's convert the imported project skeletons to Maven
 
 In the project explorer, right-click on **catalog-spring-boot** and then click on **Convert to Project**.
 
-![CodeReady Workspaces - Convert to Project]({% image_path codeready-convert.png %}){:width="500px"}
+image:{% image_path codeready-convert.png %}[CodeReady Workspaces - Convert to Project,500]
 
 Choose **Maven** from the project configurations and then click on **Save**
 
-![CodeReady Workspaces - Convert to Project]({% image_path codeready-maven.png %}){:width="500px"}
+image:{% image_path codeready-maven.png %}[CodeReady Workspaces - Convert to Project,500]
 
-> Repeat the above for **inventory-thorntail** and **gateway-vertx** projects.
+IMPORTANT: Repeat the above for **inventory-thorntail** and **gateway-vertx** projects.
 
-> Convert the **web-nodejs** project into **NodeJS**.
+IMPORTANT: Convert the **web-nodejs** project into **NodeJS**.
 
-> The **Terminal** window in CodeReady Workspaces. For the rest of these labs, anytime you need to run a command in a terminal, you can use the CodeReady Workspaces **Terminal** window.
-> ![CodeReady Workspaces - Terminal]({% image_path codeready-terminal.png %}){:width="700px"}
+IMPORTANT: The **Terminal** window in CodeReady Workspaces. For the rest of these labs, anytime you need to run a command in a terminal, you can use the CodeReady Workspaces **Terminal** window.
+IMPORTANT: !{% image_path codeready-terminal.png %}[CodeReady Workspaces - Terminal^]{:width="700px"}
 
 ## Explore OpenShift with OpenShift DO
 
-[OpenShift Do (Odo)](https://openshiftdo.org/) is a CLI tool for developers who are writing, building, and deploying applications on OpenShift. With Odo, developers get an opinionated CLI tool that supports fast, iterative development which abstracts away Kubernetes and OpenShift concepts, thus allowing them to focus on what's most important to them: **CODE**.
+https://openshiftdo.org/[OpenShift Do (Odo)^] is a CLI tool for developers who are writing, building, and deploying applications on OpenShift. With Odo, developers get an opinionated CLI tool that supports fast, iterative development which abstracts away Kubernetes and OpenShift concepts, thus allowing them to focus on what's most important to them: **CODE**.
 
-In order to login, we will use the `odo` command and then specify the server that we
+In order to login, we will use the `*odo*` command and then specify the server that we
 want to authenticate to.
 
-Issue the following command in CodeReady Workspaces terminal and replace `{{OPENSHIFT_CONSOLE_URL}}` 
+Issue the following command in CodeReady Workspaces terminal and replace `*{{OPENSHIFT_CONSOLE_URL}}*` 
 with your OpenShift Web Console url. 
 
-~~~shell
+----
 $ odo login {{OPENSHIFT_CONSOLE_URL}}
-~~~
+----
 
 You may see the following output:
 
-~~~shell
+----
 The server uses a certificate signed by an unknown authority.
 You can bypass the certificate check, but any data you send to the server could be intercepted by others.
 Use insecure connections? (y/n):
-~~~
+----
 
-Enter in `y` to use a potentially insecure connection.  The reason you received
+Enter in `*y*` to use a potentially insecure connection.  The reason you received
 this message is because we are using a self-signed certificate for this
 workshop, but we did not provide you with the CA certificate that was generated
 by OpenShift. In a real-world scenario, either OpenShift's certificate would be
@@ -116,7 +116,7 @@ Enter the username and password provided to you by the instructor
 
 Congratulations, you are now authenticated to the OpenShift server.
 
-[Projects]({{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/projects_and_users.html#projects) 
+{{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/projects_and_users.html#projects[Projects^] 
 are a top level concept to help you organize your deployments. An
 OpenShift project allows a community of users (or a user) to organize and manage
 their content in isolation from other communities. Each project has its own
@@ -127,13 +127,13 @@ application services and endpoints you (or your teams) are using for your work.
 For this lab, let's create a project that you will use in the following labs for 
 deploying your applications. 
 
-> Make sure to follow your instructor guidance on the project names in order to 
-> have a unique project name for yourself e.g. appending your username to the project name
+IMPORTANT: Make sure to follow your instructor guidance on the project names in order to 
+IMPORTANT: have a unique project name for yourself e.g. appending your username to the project name
 
-~~~shell
+----
 $ odo project create {{COOLSTORE_PROJECT}}
 OK  New project created and now using project : {{COOLSTORE_PROJECT}}
-~~~
+----
 
 OpenShift ships with a web-based console that will allow users to
 perform various tasks via a browser.  To get a feel for how the web console
@@ -151,10 +151,10 @@ change.
 
 Due to security reasons, by default, containers are not allowed to access to the OpenShift REST API. We need to grant them permission in order to use Service and Config Map discovery features later.
 
-> Make sure to replace the project name with your own unique project name
+IMPORTANT: Make sure to replace the project name with your own unique project name
 
-~~~shell
+----
 $ oc policy add-role-to-user view -n {{COOLSTORE_PROJECT}} -z default
-~~~ 
+----
 
 Now you are ready to get started with the labs!
