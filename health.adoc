@@ -1,9 +1,9 @@
-## Monitoring Application Health 
+== Monitoring Application Health 
 
 In this lab we will learn how to monitor application health using OpenShift 
 health probes and how you can see container resource consumption using metrics.
 
-####  Health Probes
+===  Health Probes
 
 When building microservices, monitoring becomes of extreme importance to make sure all services 
 are running at all times, and when they don't there are automatic actions triggered to rectify 
@@ -42,7 +42,7 @@ start listening until initialization is complete.
  
 Let's add health probes to the microservices deployed so far.
 
-####  Explore Health REST Endpoints
+===  Explore Health REST Endpoints
 
 Spring Boot, Thorntail and Vert.x all provide out-of-the-box support for creating RESTful endpoints that
 provide details on the health of the application. These endpoints by default provide basic data about the 
@@ -57,7 +57,7 @@ dependencies which is already done for the Catalog services.
 Verify that the health endpoint works for the Catalog service using `*curl`, replacing `*{{CATALOG_ROUTE_HOST}}*` 
 with the Catalog route url:
 
-IMPORTANT: Remember how to find out the route urls? Try `*oc get route catalog*` 
+TIP: Remember how to find out the route urls? Try `*oc get route catalog*` 
 
 ----
 $ curl http://{{CATALOG_ROUTE_HOST}}/health
@@ -72,7 +72,7 @@ This is also already done for the Inventory service.
 Verify that the health endpoint works for the Inventory service using `*curl`, replacing `*{{INVENTORY_ROUTE_HOST}}*` 
 with the Inventory route url:
 
-IMPORTANT: You know this by now! Use `*oc get route inventory*` to get the Inventory route url 
+TIP: You know this by now! Use `*oc get route inventory*` to get the Inventory route url 
 
 ----
 $ curl http://{{INVENTORY_ROUTE_HOST}}/node
@@ -93,7 +93,7 @@ which is enabled by adding `*io.vertx:vertx-health-check*` as a dependency to th
 Verify that the health endpoint works for the Inventory service using `*curl`, replacing `*{{API_GATEWAY_ROUTE_HOST}}*` 
 with the API Gateway route url::
 
-IMPORTANT: Yup! You can use `*oc get route gateway*` to get the API Gateway route url 
+TIP: Yup! You can use `*oc get route gateway*` to get the API Gateway route url 
 
 ----
 $ curl http://{{API_GATEWAY_ROUTE_HOST}}/health
@@ -104,7 +104,7 @@ $ curl http://{{API_GATEWAY_ROUTE_HOST}}/health
 Last but not least, although you can build more sophisticated health endpoints for the Web UI as well, you 
 can use the root context ("/") of the Web UI in this lab to verify it's up and running.
 
-####  Monitoring Catalog Service Health
+===  Monitoring Catalog Service Health
 
 Health probes are defined on the deployment config for each pod and can be added using OpenShift Web 
 Console or OpenShift CLI. You will try both in this lab.
@@ -122,7 +122,7 @@ inventory   1          1         1         config,image(inventory:latest)
 web         1          1         1         config,image(web:latest)
 ----
 
-IMPORTANT: `*dc*` stands for deployment config
+TIP: `*dc*` stands for deployment config
 
 Add a liveness probe on the catalog deployment config using `*oc set probe`:
 
@@ -130,26 +130,26 @@ Add a liveness probe on the catalog deployment config using `*oc set probe`:
 $ oc set probe dc/catalog --liveness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/health
 ----
 
-IMPORTANT: OpenShift automates deployments using 
-IMPORTANT: {{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
-IMPORTANT: that react to changes to the container image or configuration. 
-IMPORTANT: Therefore, as soon as you define the probe, OpenShift automatically redeploys the 
-IMPORTANT: Catalog pod using the new configuration including the liveness probe. 
+TIP: OpenShift automates deployments using 
+{{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
+that react to changes to the container image or configuration. 
+Therefore, as soon as you define the probe, OpenShift automatically redeploys the 
+Catalog pod using the new configuration including the liveness probe. 
 
 The `*--get-url*` defines the HTTP endpoint to use for check the liveness of the container. The `*\http://:8080*` 
 syntax is a convenient way to define the endpoint without having to worry about the hostname for the running 
 container. 
 
-IMPORTANT: It is possible to customize the probes even further using for example `*--initial-delay-seconds*` to specify how long 
-IMPORTANT: to wait after the container starts and before to begin checking the probes. Run `*oc set probe --help*` to get 
-IMPORTANT: a list of all available options.
+TIP: It is possible to customize the probes even further using for example `*--initial-delay-seconds*` to specify how long 
+to wait after the container starts and before to begin checking the probes. Run `*oc set probe --help*` to get 
+a list of all available options.
 
 Add a readiness probe on the catalog deployment config using the same `*/health*` endpoint that you used for 
 the liveness probe.
 
-IMPORTANT: It's recommended to have separate endpoints for readiness and liveness to indicate to OpenShift when 
-IMPORTANT: to restart the container and when to leave it alone and remove it from the load-balancer so that an administrator 
-IMPORTANT: would  manually investigate the issue. 
+TIP: It's recommended to have separate endpoints for readiness and liveness to indicate to OpenShift when 
+to restart the container and when to leave it alone and remove it from the load-balancer so that an administrator 
+would  manually investigate the issue. 
 
 ----
 $ oc set probe dc/catalog --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/health 
@@ -158,13 +158,13 @@ $ oc set probe dc/catalog --readiness --initial-delay-seconds=30 --failure-thres
 Voilà! OpenShift automatically restarts the Catalog pod and as soon as the 
 health probes succeed, it is ready to receive traffic. 
 
-IMPORTANT: Fabric8 Maven Plugin can also be configured to automatically set the health probes when running `*fabric8:deploy*` 
-IMPORTANT: goal. Read more on https://maven.fabric8.io/#enrichers[Fabric8 docs^] under 
-IMPORTANT: https://maven.fabric8.io/#f8-spring-boot-health-check[Spring Boot^], 
-IMPORTANT: https://maven.fabric8.io/#f8-healthcheck-thorntail-v2[Thorntail^] and 
-IMPORTANT: https://maven.fabric8.io/#f8-vertx-health-check[Eclipse Vert.x^].
+TIP: Fabric8 Maven Plugin can also be configured to automatically set the health probes when running `*fabric8:deploy*` 
+goal. Read more on https://maven.fabric8.io/#enrichers[Fabric8 docs^] under 
+https://maven.fabric8.io/#f8-spring-boot-health-check[Spring Boot^], 
+https://maven.fabric8.io/#f8-healthcheck-thorntail-v2[Thorntail^] and 
+https://maven.fabric8.io/#f8-vertx-health-check[Eclipse Vert.x^].
 
-####  Monitoring Inventory Service Health
+===  Monitoring Inventory Service Health
 
 Adding liveness and readiness probes can be done at the same time if you want to define the same health endpoint 
 and parameters for both liveness and readiness probes. 
@@ -194,7 +194,7 @@ Namespace:  {{COOLSTORE_PROJECT}}
 ...
 ----
 
-####  Monitoring API Gateway Health
+===  Monitoring API Gateway Health
 
 You are an expert in health probes by now! Add liveness and readiness probes to the API Gateway service:
 
@@ -205,7 +205,7 @@ $ oc set probe dc/gateway --liveness --readiness --initial-delay-seconds=15 --fa
 OpenShift automatically restarts the Inventory pod and as soon as the health probes succeed, it is 
 ready to receive traffic. 
 
-####  Monitoring Web UI Health
+===  Monitoring Web UI Health
 
 Although you can add the liveness and health probes to the Web UI using a single CLI command, let's 
 give the OpenShift Web Console a try this time.
@@ -215,8 +215,8 @@ Go the OpenShift Web Console in your browser and in the **{{COOLSTORE_PROJECT}}*
 tab. You will see the warning about health checks, with a link to
 click in order to add them. Click **Add health checks** now. 
 
-IMPORTANT: Instead of **Configuration** tab, you can directly click on **Actions** button on the top-right 
-IMPORTANT: and then **Edit Health Checks**
+TIP: Instead of **Configuration** tab, you can directly click on **Actions** button on the top-right 
+and then **Edit Health Checks**
 
 image:{% image_path health-web-details.png %}[Health Probes,900]
 
@@ -246,7 +246,7 @@ checks and it turns blue when it's ready!
 
 image:{% image_path health-web-redeploy.png %}[Web Redeploy,740]
 
-#### Monitoring Metrics
+=== Monitoring Metrics
 
 Metrics are another important aspect of monitoring applications which is required in order to 
 gain visibility into how the application behaves and particularly in identifying issues.

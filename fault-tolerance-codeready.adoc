@@ -35,8 +35,8 @@ application pods and ensuring the specified number of instances for each applica
 is running. Therefore the number of pods you want to scale to should be defined on the 
 deployment config.
 
-IMPORTANT: You can scale pods up and down via the OpenShift Web Console by clicking on the up and 
-IMPORTANT: down arrows on the right side of each pods blue circle.
+TIP: You can scale pods up and down via the OpenShift Web Console by clicking on the up and 
+down arrows on the right side of each pods blue circle.
 
 First, get list of deployment configs available in the project.
 
@@ -74,15 +74,18 @@ Endpoints:              10.129.0.146:8080,10.129.0.232:8080
 ...
 ----
 
-`Endpoints*` shows the IPs of the 2 pods that the load-balancer is sending traffic to.
+*_Endpoints_* shows the IPs of the 2 pods that the load-balancer is sending traffic to.
 
-IMPORTANT: The load-balancer by default, sends the client to the same pod on consequent requests. The 
-IMPORTANT: https://docs.openshift.com/container-platform/3.5/architecture/core_concepts/routes.html#load-balancing[load-balancing strategy^] 
-IMPORTANT: can be specified using an annotation on the route object. Run the following to change the load-balancing 
-IMPORTANT: strategy to round robin: 
-IMPORTANT: 
-IMPORTANT:     $ oc annotate route/web haproxy.router.openshift.io/balance=roundrobin
-IMPORTANT:
+[TIP]
+====
+The load-balancer by default, sends the client to the same pod on consequent requests. The 
+https://docs.openshift.com/container-platform/3.5/architecture/core_concepts/routes.html#load-balancing[load-balancing strategy^] 
+can be specified using an annotation on the route object. Run the following to change the load-balancing 
+strategy to round robin: 
+----
+$ oc annotate route/web haproxy.router.openshift.io/balance=roundrobin
+----
+====
 
 #### Scaling Applications on Auto-pilot
 
@@ -116,18 +119,18 @@ in {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#quality-of-service-t
 
 Set the following resource constraints on the Web UI pod:
 
-* Memory Request: 256 MB
-* Memory Limit: 512 MB
+* Memory Request: 256 Mi
+* Memory Limit: 512 Mi
 * CPU Request: 200 millicore
-* CPU Limit: 300 millicore
+* CPU Limit: 400 millicore
 
-IMPORTANT: CPU is measured in units called millicores. Each node in a cluster inspects the 
-IMPORTANT: operating system to determine the amount of CPU cores on the node, then multiplies 
-IMPORTANT: that value by 1000 to express its total capacity. For example, if a node has 2 cores, 
-IMPORTANT: the node’s CPU capacity would be represented as 2000m. If you wanted to use 1/10 of 
-IMPORTANT: a single core, it would be represented as 100m. Memory is measured in 
-IMPORTANT: bytes and is specified with {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-compute-resources[SI suffices^] 
-IMPORTANT: (E, P, T, G, M, K) or their power-of-two-equivalents (Ei, Pi, Ti, Gi, Mi, Ki).
+TIP: CPU is measured in units called millicores. Each node in a cluster inspects the 
+operating system to determine the amount of CPU cores on the node, then multiplies 
+that value by 1000 to express its total capacity. For example, if a node has 2 cores, 
+the node’s CPU capacity would be represented as 2000m. If you wanted to use 1/10 of 
+a single core, it would be represented as 100m. Memory is measured in 
+bytes and is specified with {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-compute-resources[SI suffices^] 
+(E, P, T, G, M, K) or their power-of-two-equivalents (Ei, Pi, Ti, Gi, Mi, Ki).
 
 ----
 $ oc set resources dc/web --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi
@@ -135,19 +138,19 @@ $ oc set resources dc/web --limits=cpu=400m,memory=512Mi --requests=cpu=200m,mem
 deploymentconfig "web" resource requirements updated
 ----
 
-IMPORTANT: You can also use the OpenShift Web Console by clicking on **Applications** >> **Deployments** within 
-IMPORTANT: the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
-IMPORTANT: the top-right, choose **Edit Resource Limits**.
+TIP: You can also use the OpenShift Web Console by clicking on **Applications** >> **Deployments** within 
+the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
+the top-right, choose **Edit Resource Limits**.
 
 The pods get restarted automatically setting the new resource limits in effect. Now you can define an 
 autoscaler using `*oc autoscale*` command to scale the Web UI pods up to 5 instances whenever 
 the CPU consumption passes 50% utilization:
 
-IMPORTANT: You can configure an autoscaler using OpenShift Web Console by clicking 
-IMPORTANT: on **Applications** >> **Deployments** within 
-IMPORTANT: the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
-IMPORTANT: the top-right, choose **Add Autoscaler** or **Edit Autoscaler**, depending on whether or not 
-IMPORTANT: you already have an autoscaler configured.
+TIP: You can configure an autoscaler using OpenShift Web Console by clicking 
+on **Applications** >> **Deployments** within 
+the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
+the top-right, choose **Add Autoscaler** or **Edit Autoscaler**, depending on whether or not 
+you already have an autoscaler configured.
 
 ----
 $ oc autoscale dc/web --min 1 --max 5 --cpu-percent=40
@@ -178,9 +181,9 @@ As the load is generated, you will notice that it will create a spike in the
 Web UI cpu usage and trigger the autoscaler to scale the Web UI container to 5 pods (as configured 
 on the deployment config) to cope with the load.
 
-IMPORTANT: Depending on the resources available on the OpenShift cluster in the lab environment, 
-IMPORTANT: the Web UI might scale to fewer than 5 pods to handle the extra load. Run the command again 
-IMPORTANT: to generate more load.
+TIP: Depending on the resources available on the OpenShift cluster in the lab environment, 
+the Web UI might scale to fewer than 5 pods to handle the extra load. Run the command again 
+to generate more load.
 
 image:{% image_path fault-autoscale-web.gif %}[Web UI Automatically Scaled,740]
 
@@ -220,9 +223,9 @@ starts new identical application pods based on the same container image and conf
 specified number of instances are running at all times. An example of a removed pod is when an entire 
 node (virtual or physical machine) crashes and is removed from the cluster.
 
-IMPORTANT: OpenShift is quite orderly in this regard and if extra instances of the application pod would start running, 
-IMPORTANT: it would kill the extra pods so that the number of running instances matches what is configured on the deployment 
-IMPORTANT: config.
+TIP: OpenShift is quite orderly in this regard and if extra instances of the application pod would start running, 
+it would kill the extra pods so that the number of running instances matches what is configured on the deployment 
+config.
 
 All of the above comes out-of-the-box and doesn't need any extra configuration. Remove the Catalog 
 pod to verify how OpenShift starts the pod again. First, check the Catalog pod that is running:
@@ -288,8 +291,8 @@ $ oc scale dc/inventory --replicas=0
 
 Now point your browser at the Web UI route url.
 
-IMPORTANT: You can find the Web UI route url in the OpenShift Web Console above the `*web*` pod or 
-IMPORTANT: using the `*oc get routes*` command.
+TIP: You can find the Web UI route url in the OpenShift Web Console above the `*web*` pod or 
+using the `*oc get routes*` command.
 
 image:{% image_path fault-coolstore-no-cb.png %}[CoolStore Without Circuit Breaker,840]
 
@@ -303,6 +306,8 @@ provide a default inventory status when the Inventory service is not responsive.
 In the `*gateway-vertx*` project, open `*src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java*` and 
 replace its code it with the following code:
 
+[source,java]
+.GatewayVerticle.java
 ----
 package com.redhat.cloudnative.gateway;
 
