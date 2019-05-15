@@ -1,4 +1,4 @@
-## Deploying the Catalog Service
+== Deploying the Catalog Service
 
 *5 MINUTES PRACTICE*
 
@@ -7,7 +7,7 @@ The **Catalog Service** is part of the Cool Store architecture to provide a list
 
 image:{% image_path coolstore-arch-catalog-spring-boot.png %}[CoolStore Architecture,400]
 
-#### What is Spring Boot?
+=== What is Spring Boot?
 
 Spring Boot is an opinionated framework that makes it easy to create stand-alone Spring based 
 applications with embedded web containers such as Tomcat (or JBoss Web Server), Jetty and Undertow 
@@ -17,7 +17,7 @@ file that can be deployed on stand-alone web containers.
 The opinionated approach means many choices about Spring platform and third-party libraries 
 are already made by Spring Boot so that you can get started with minimum effort and configuration.
 
-#### Spring Boot Maven Project 
+=== Spring Boot Maven Project 
 
 The **catalog-spring-boot** project has the following structure which shows the components of 
 the Spring Boot project laid out in different subdirectories according to Maven best practices:
@@ -28,7 +28,7 @@ components of the Spring Boot project are laid out in different subdirectories a
 
 image:{% image_path springboot-catalog-project.png %}[Catalog Project,300]
 
-#### Deploy Catalog Service on OpenShift
+=== Deploy Catalog Service on OpenShift
 
 Now it’s time to build and deploy our service on OpenShift. 
 

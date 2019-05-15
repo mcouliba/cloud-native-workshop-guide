@@ -1,4 +1,4 @@
-## Microservices with Spring Boot
+== Microservices with Spring Boot
 
 *15 MINUTES PRACTICE*
 
@@ -8,7 +8,7 @@ the Catalog service in order to provide a list of products for the CoolStore onl
 
 image:{% image_path coolstore-arch-catalog-spring-boot.png %}[CoolStore Architecture,400]
 
-#### What is Spring Boot?
+=== What is Spring Boot?
 
 image:{% image_path spring-boot-logo.png %}[Spring Boot, 400]
 
@@ -20,7 +20,7 @@ file that can be deployed on stand-alone web containers.
 The opinionated approach means many choices about Spring platform and third-party libraries 
 are already made by Spring Boot so that you can get started with minimum effort and configuration.
 
-#### Spring Boot Maven Project 
+=== Spring Boot Maven Project 
 
 The **catalog-spring-boot** project has the following structure which shows the components of 
 the Spring Boot project laid out in different subdirectories according to Maven best practices:
@@ -84,7 +84,7 @@ RESTful endpoint to create the Catalog service:
 
 image:{% image_path springboot-catalog-arch.png %}[Catalog RESTful Service,640]
 
-#### Create the Domain Model
+=== Create the Domain Model
 
 Create a new Java class named ***Product*** in the ***com.redhat.cloudnative.catalog*** package with the below code and 
 following fields: ***itemId*** ***name*** ***desc*** and ***price***
@@ -164,7 +164,7 @@ Review the ***Product*** domain model and note the JPA annotations on this class
 class as a JPA entity, ***@Table*** customizes the table creation process by defining a table 
 name and database constraint and ***@Id*** marks the primary key for the table
 
-#### Create a Data Repository
+=== Create a Data Repository
 
 Spring Data repository abstraction simplifies dealing with data models in Spring applications by 
 reducing the amount of boilerplate code required to implement data access layers for various 
@@ -194,7 +194,7 @@ public interface ProductRepository extends CrudRepository<Product, String> {
 That's it! Now that you have a domain model and a repository to retrieve the domain model, 
 let's create a RESTful service that returns the list of products.
 
-#### Create a RESTful Service
+=== Create a RESTful Service
 
 Spring Boot uses Spring Web MVC as the default RESTful stack in Spring applications. Create 
 a new Java class named ***CatalogController*** in ***com.redhat.cloudnative.catalog*** package with 
@@ -266,7 +266,7 @@ Stop the Inventory service by `*clicking on the stop icon*` near **run spring-bo
 image:{% image_path springboot-che-stop.png %}[Stop Icon - Spring Boot,200]
 
 
-#### Deploy Spring Boot on OpenShift
+=== Deploy Spring Boot on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 

@@ -1,4 +1,4 @@
-## Enterprise Microservices with Eclipse Vert.x
+== Enterprise Microservices with Eclipse Vert.x
 
 *15 MINUTES PRACTICE*
 
@@ -6,7 +6,7 @@ In this lab you will learn about building microservices using Vert.x.
 
 image:{% image_path coolstore-arch-inventory-vertx.png %}[CoolStore Architecture,400]
 
-#### What is Eclipse Vert.x?
+=== What is Eclipse Vert.x?
 
 http://vertx.io) is a toolkit for building reactive applications on the Java Virtual Machine (JVM[Eclipse Vert.x^]. Vert.x does not 
 impose a specific framework or packaging model and can be used within your existing applications and frameworks 
@@ -22,7 +22,7 @@ services that are:
 
 Vert.x is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
 
-#### Vert.x Maven Project 
+=== Vert.x Maven Project 
 
 The `*inventory-vertx*` project has the following structure which shows the components of 
 the Vert.x project laid out in different subdirectories according to Maven best practices:
@@ -147,7 +147,7 @@ application with `*java -jar`.
 
 Now let's write some code and expose the databae as RESTful endpoint to create the Inventory service:
 
-#### Exposing the database as a RESTful Service
+=== Exposing the database as a RESTful Service
 
 Replace the content of ***src/main/java/com/redhat/cloudnative/inventory/InventoryVerticle.java*** class with the following:
 
@@ -306,7 +306,7 @@ image:{% image_path wfswarm-inventory-che-preview-browser.png %}[Preview URL,900
 
 The REST API returned a JSON object representing the inventory count for this product. Congratulations!
 
-#### Deploy Vert.x on OpenShift
+=== Deploy Vert.x on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 

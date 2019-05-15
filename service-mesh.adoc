@@ -1,10 +1,10 @@
-## Microservice Tracing with Service Mesh
+== Microservice Tracing with Service Mesh
 
 *20 MINUTES PRACTICE*
 
 In this lab you will enable tracing and monitoring of your backend services using Service Mesh.
 
-#### What is OpenShift Service Mesh?
+=== What is OpenShift Service Mesh?
 
 Red Hat OpenShift Service Mesh is a platform that provides behavioral insight and operational control over the service mesh, providing a uniform way to connect, secure, and monitor microservice applications.
 
@@ -14,7 +14,7 @@ Based on the open source https://istio.io/[Istio^] project, Red Hat OpenShift Se
 
 Red Hat OpenShift Service Mesh provides an easy way to create a network of deployed services that provides discovery, load balancing, service-to-service authentication, failure recovery, metrics, and monitoring. A service mesh also provides more complex operational functionality, including A/B testing, canary releases, rate limiting, access control, and end-to-end authentication.
 
-#### OpenShift Service Mesh Architecture
+=== OpenShift Service Mesh Architecture
 
 Red Hat OpenShift Service Mesh is logically split into a data plane and a control plane:
 
@@ -31,7 +31,7 @@ The components that make up the data plane and the control plane are:
 * **Pilot** - is the control plane component responsible for configuring the proxies at runtime. Pilot provides service discovery for the Envoy sidecars, traffic management capabilities for intelligent routing (for example, A/B tests or canary deployments), and resiliency (timeouts, retries, and circuit breakers).
 * **Citadel** - is the control plane component responsible for certificate issuance and rotation. Citadel provides strong service-to-service and end-user authentication with built-in identity and credential management. You can use Citadel to upgrade unencrypted traffic in the service mesh. Using Citadel, operators can enforce policies based on service identity rather than on network controls.
 
-#### Enabling Service Mesh to Catalog Service
+=== Enabling Service Mesh to Catalog Service
 
 OpenShift Service Mesh automatically inject the sidecar into the Pod by specifying *_sidecar.istio.io/inject:true_* annotation in the DeploymentConfig.
 
@@ -53,7 +53,8 @@ $ oc rollout resume dc/catalog # <5>
 [TIP]
 .Other Option
 ====
-As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability. In CodeReady Workspaces, click on *_'Commands Palette'_* and click on **'SERVICE MESH > Catalog Service: Inject Istio Sidecar'**
+As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability. 
+In CodeReady Workspaces, click on *_'Commands Palette'_* and click on **'SERVICE MESH > Catalog Service: Inject Istio Sidecar'**
 
 image:{% image_path  codeready-command-inject-catalog.png %}[Inject Sidecar^,200]
 ====
@@ -67,9 +68,10 @@ catalog-3-ppj47  	2/2	Running		1		8m
 ----
 
 The status should be **Running** and there should be **2/2** pods in the **Ready** column. 
-Wait few seconds that the application restarts then `*click on the Catalog Route*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] and ensure the proper functioning of the service.
+Wait few seconds that the application restarts then `*Click on the OpenShift Route of _'Catalog Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]
+and ensure the proper functioning of the service.
 
-#### Enabling Service Mesh to Inventory Service
+=== Enabling Service Mesh to Inventory Service
 
 Repeat the above step to enable Service Mesh to Inventory Service.
 
@@ -81,13 +83,16 @@ $ oc patch dc/inventory --patch '{"spec": {"template": {"spec": {"containers": [
 $ oc rollout resume dc/inventory
 ----
 
-IMPORTANT: **Other Option** 
-IMPORTANT:
-IMPORTANT: As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability.
-IMPORTANT: Click on Commands Palette and click on **SERVICE MESH > Inventory Service: Inject Istio Sidecar**
-IMPORTANT: !{% image_path  codeready-command-inject-inventory.png %}[Inject Sidecar^]{:width="200px"}
+[TIP]
+.Other Option
+====
+As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability. 
+In CodeReady Workspaces, click on *_'Commands Palette'_* and click on **'SERVICE MESH > Inventory Service: Inject Istio Sidecar'**
 
-To confirm that the application is successfully deployed, run this command:
+image:{% image_path  codeready-command-inject-inventory.png %}[Inject Sidecar^,200]
+====
+
+To confirm that the application is successfully deployed, `*run this following command*`:
 
 ----
 $ oc get pods -lapp=inventory,deploymentconfig=inventory
@@ -96,9 +101,10 @@ inventory-2-k6ftf	2/2	Running		1		3m
 ----
 
 The status should be **Running** and there should be **2/2** pods in the **Ready** column.
-Wait few seconds that the application restarts then `*click on the Inventory Route*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] and ensure the proper functioning of the service.
+Wait few seconds that the application restarts then `*Click on the OpenShift Route of _'Inventory Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] 
+and ensure the proper functioning of the service.
 
-#### Enabling Service Mesh to Gateway Service
+=== Enabling Service Mesh to Gateway Service
 
 Repeat the above step to enable Service Mesh to Gateway Service.
 
@@ -110,13 +116,16 @@ $ oc patch dc/gateway --patch '{"spec": {"template": {"spec": {"containers": [{"
 $ oc rollout resume dc/gateway
 ----
 
-IMPORTANT: **Other Option** 
-IMPORTANT:
-IMPORTANT: As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability.
-IMPORTANT: Click on Commands Palette and click on **SERVICE MESH > Gateway Service: Inject Istio Sidecar**
-IMPORTANT: !{% image_path  codeready-command-inject-gateway.png %}[Inject Sidecar^]{:width="200px"}
+[TIP]
+.Other Option
+====
+As an alternative way, you can use the *_Commands Palette_* to enable Service Mesh capability. 
+In CodeReady Workspaces, click on *_'Commands Palette'_* and click on **'SERVICE MESH > Gateway Service: Inject Istio Sidecar'**
 
-To confirm that the application is successfully deployed, run this command:
+image:{% image_path  codeready-command-inject-gateway.png %}[Inject Sidecar^,200]
+====
+
+To confirm that the application is successfully deployed, `*run this following command*`:
 
 ----
 $ oc get pods -lapp=gateway,deploymentconfig=gateway
@@ -125,50 +134,49 @@ gateway-2-zqsmn		2/2	Running		1		1m
 ----
 
 The status should be **Running** and there should be **2/2** pods in the **Ready** column.
-Wait few seconds that the application restarts then `*click on the Gateway Route*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] and ensure the proper functioning of the service.
+Wait few seconds that the application restarts then `*Click on the OpenShift Route of _'Gateway Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]
+and ensure the proper functioning of the service.
 
-#### Controlling Ingress Traffic
+=== Controlling Ingress Traffic
 
-In a OpenShift environment, the OpenShift Route is used to specify services that should be exposed outside the cluster. In an Istio service mesh, a better approachis to use a different configuration model, namely *_Istio Gateway***. 
+In a OpenShift environment, the OpenShift Route is used to specify services that should be exposed outside the cluster. In an Istio service mesh, a better approachis to use a different configuration model, namely *_Istio Gateway_*. 
 
 * A **Gateway** describes a load balancer operating at the edge of the mesh receiving incoming or outgoing HTTP/TCP connections. The specification describes a set of ports that should be exposed, the type of protocol to use, SNI configuration for the load balancer, etc.
 * A **VirtualService** defines a set of traffic routing rules to apply when a host is addressed. Each routing rule defines matching criteria for traffic of a specific protocol. If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
 
-In the Terminal, execute the following command to create a (Istio) `*Gateway*` and a `*VirtualService*` for the `*Gateway Service`
+In the Terminal, `*execute the following command*` to create an *_Istio Gateway_* and a *_VirtualService_* for the *_Gateway Service_*
 
 ----
 $ oc create -f /projects/labs/gateway-vertx/openshift/istio-gateway.yml
 $ sed s/COOLSTORE_PROJECT/{{COOLSTORE_PROJECT}}/g /projects/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
 ----
 
-To confirm that the `*Istio Gateway*` is well configured,
+To confirm that the *_Istio Gateway_* is well configured,
 
 ----
 $ curl -o /dev/null -s -w "%{http_code}\n" http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{COOLSTORE_PROJECT}}/api/products
 200
 ----
 
- > Make sure to use your dedicated project {{COOLSTORE_PROJECT}}
+The result should be *_200_* (Successful).
 
-The result should be `*200*` (Successful).
+=== Updating the WebUI to use the Istio Gateway
 
-#### Updating the WebUI to use the Istio Gateway
-
-Issue the following command to configure the `*WebUI Service*` to use the `*Istio Gateway*` instead of the `*OCP Route`:
+`*Issue the following command*` to configure the *_WebUI Service_* to use the *_Istio Gateway_* instead of the *_OpenShift Route_*:
 
 ----
 $ oc set env dc/web COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{COOLSTORE_PROJECT}}
 ----
 
- > Make sure to use your dedicated project {{COOLSTORE_PROJECT}}
-
-#### Testing the application
+=== Testing the application
 
 Point your browser at the Web UI route url. You should be able to see the CoolStore with all products and their inventory status.
 
 IMPORTANT: Refresh your browser several times to generate traffic.
 
-#### What is Kiali?
+=== What is Kiali?
+
+image:{% image_path kiali-logo.png %}[Kiali,400]
 
 A Microservice Architecture breaks up the monolith into many smaller pieces that are composed together. Patterns to secure the communication between services like fault tolerance (via timeout, retry, circuit breaking, etc.) have come up as well as distributed tracing to be able to see where calls are going.
 
@@ -176,17 +184,17 @@ A service mesh can now provide these services on a platform level and frees the 
 
 https://www.kiali.io[Kiali^] works with Istio, in OpenShift or Kubernetes, to visualize the service mesh topology, to provide visibility into features like circuit breakers, request rates and more. It offers insights about the mesh components at different levels, from abstract Applications to Services and Workloads.
 
-#### Observability with Kiali
+=== Observability with Kiali
 
 Kiali provides an interactive graph view of your namespace in real time, being able to display the interactions at several levels (applications, versions, workloads), with contextual information and charts on the selected graph node or edge.
 
 First, you need to access to Kiali. 
-Launch a browser and navigate to {{ KIALI_URL }}) *(please make sure to replace **infrax** with your dedicated project[Kiali Console^]*. 
+`*Launch a browser and navigate to {{ KIALI_URL }})[Kiali Console^]*`. 
 You should see the Kiali console login screen.
 
 image:{% image_path kiali-login.png %}[Kiali- Log In,500]
 
-Log in to the Kiali console as `*{{OPENSHIFT_USER}}`/`{{OPENSHIFT_PASSWORD}}`
+Log in to the Kiali console as `*{{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}*`
 
 After you log in, `*click on the 'Graph' link*` in the left navigation and enter the following configuration:
 
@@ -196,13 +204,14 @@ After you log in, `*click on the 'Graph' link*` in the left navigation and enter
 
 image:{% image_path kiali-graph.png %}[Kiali- Graph,700]
 
-IMPORTANT: Please ignore the error for the `*Gateway Service`. It is because the `*Cart Service*` is missing and its deployment is not a part of this lab.
+WARNING: Please ignore the error for the *_Gateway Service_*. 
+It is because the *_Cart Service_* is missing and its deployment is not a part of this lab.
 
- This page shows a graph with all the microservices, connected by the requests going through them. On this page, you can see how the services interact with each other. 
+This page shows a graph with all the microservices, connected by the requests going through them. On this page, you can see how the services interact with each other. 
 
-#### Tracing with Kiali and Jaeger
+=== Tracing with Kiali and Jaeger
 
-https://www.jaegertracing.io[Kiali](https://www.kiali.io) includes [Jaeger Tracing^] to provide distributed tracing out of the box.
+https://www.kiali.io/[Kiali^] includes [https://www.jaegertracing.io/[Jaeger Tracing^] to provide distributed tracing out of the box.
 Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system released as open source by Uber Technologies. It is used for monitoring and troubleshooting microservices-based distributed systems, including:
 
 * Distributed context propagation
@@ -213,15 +222,16 @@ Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system relea
 
 IMPORTANT: Because of certificates issues, you need first to access the main {{ JAEGER_URL }}[Jaeger Console^] to use it through Kiali.
 
-From the {{ KIALI_URL }}) *(please make sure to replace **infrax** with your dedicated project[Kiali Console^]*, click on the `*Distributed Tracing*` link in the left navigation and enter the following configuration:
+From the {{ KIALI_URL }}[Kiali Console^], `*click on the _Distributed Tracing_ link*` in the left navigation and enter the following configuration:
 
- * Select a Namespace: `*{{COOLSTORE_PROJECT}}`
- * Select a Service: `*gateway`
- * Then click on the **magnifying glass** on the right
+ * Select a Namespace: *_{{COOLSTORE_PROJECT}}_*
+ * Select a Service: *_gateway_*
+ 
+Then `*click on the _magnifying glass_*` on the right left corner.
 
 image:{% image_path kiali-traces-view.png %}[Kiali- Traces View,700]
 
-Let’s click on the trace title bar.
+Let’s `*click on one of trace title bar*`.
 
 image:{% image_path kiali-trace-detail-view.png %}[Kiali- Trace Detail View,700]
 

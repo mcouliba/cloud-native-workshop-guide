@@ -1,4 +1,4 @@
-## Web UI with Node.js and AngularJS 
+== Web UI with Node.js and AngularJS 
 
 *5 MINUTES PRACTICE*
 
@@ -8,7 +8,7 @@ in previous labs.
 
 image:{% image_path coolstore-arch-webui-nodejs.png %}[API Gateway Pattern,400]
 
-#### What is Node.js?
+=== What is Node.js?
 
 image:{% image_path nodejs-logo.png %}[Node.js, 400]
 
@@ -21,7 +21,7 @@ https://nodejs.org/[Node.js^] non-blocking architecture allows applications to p
 requests (tens of thousands) using a single thread which makes it desirable choice for building 
 scalable web applications.
 
-#### Deploy Web UI on OpenShift
+=== Deploy Web UI on OpenShift
 
 The Web UI is built using Node.js for server-side JavaScript and AngularJS for client-side 
 JavaScript. Let's deploy it on OpenShift using the certified Node.js container image available 

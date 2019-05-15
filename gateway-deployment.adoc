@@ -1,4 +1,4 @@
-## Deploying the API Gateway
+== Deploying the API Gateway
 
 As explained in the introduction at the core of the Cool Store Portal architecture there is a Gateway component.
 
@@ -6,11 +6,11 @@ As we have done previously for the sake of saving time we're going to deploy our
 
 image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,400]
 
-#### Technology
+=== Technology
 
 Our **'API Gateway'** service needed to be easy to scale, light and responsive, these are some of the reasons why we have implemented it as a Vert.x verticle.
 
-#### What is Eclipse Vert.x?
+=== What is Eclipse Vert.x?
 
 http://vertx.io) is a toolkit for building reactive applications on the Java Virtual Machine (JVM[Eclipse Vert.x^]. Vert.x does not impose a specific framework or packaging model and can be used within your existing applications and frameworks in order to add reactive functionality by just adding the Vert.x jar files to the application classpath.
 
@@ -24,7 +24,7 @@ services that are:
 
 Vert.x is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
 
-#### Vert.x Maven Project 
+=== Vert.x Maven Project 
 
 The `*gateway-vertx*` project has the following structure which shows the components of the Vert.x project laid out in different subdirectories according to Maven best practices:
 
@@ -36,7 +36,7 @@ image:{% image_path vertx-event-loop.png %}[Vert.x Event Loop,600]
 
 Although you can have multiple, there is currently only one Verticle created in the `*gateway-vertx*` project. 
 
-#### Deploying our API Gateway on OpenShift
+=== Deploying our API Gateway on OpenShift
 
 It’s time to deploy our service on OpenShift. 
 

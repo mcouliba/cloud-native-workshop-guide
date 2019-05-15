@@ -1,4 +1,4 @@
-## Deploying the Inventory Service
+== Deploying the Inventory Service
 
 *5 MINUTES PRACTICE*
 
@@ -7,7 +7,7 @@ The **Inventory Service** is part of the Cool Store architecture to provide the 
 
 image:{% image_path coolstore-arch-inventory-thorntail.png %}[CoolStore Architecture,400]
 
-#### What is Thorntail?
+=== What is Thorntail?
 
 image:{% image_path thorntail-logo.png %}[Thorntail, 300]
 image:{% image_path microprofile-logo.png %}[Microprofile, 400]
@@ -30,14 +30,14 @@ Since https://thorntail.io/[Thorntail^] is based on Java EE standards, it signif
 existing Java EE applications to microservices and allows much of the existing code-base to be 
 reused in the new services.
 
-#### Thorntail Maven Project 
+=== Thorntail Maven Project 
 
 The **inventory-thorntail** project has the following structure which shows the components of 
 the Thorntail project laid out in different subdirectories according to Maven best practices:
 
 image:{% image_path thorntail-inventory-project.png %}[Inventory Project,300]
 
-#### Deploy Inventory Service on OpenShift
+=== Deploy Inventory Service on OpenShift
 
 Now it’s time to build and deploy our service on OpenShift. 
 

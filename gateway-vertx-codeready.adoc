@@ -1,4 +1,4 @@
-## Reactive Microservices with Eclipse Vert.x
+== Reactive Microservices with Eclipse Vert.x
 
 *15 MINUTES PRACTICE*
 
@@ -8,7 +8,7 @@ create a scalable API Gateway that aggregates Catalog and Inventory APIs.
 
 image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,400]
 
-#### What is Eclipse Vert.x?
+=== What is Eclipse Vert.x?
 
 image:{% image_path vertx-logo.png %}[Vertx, 400]
 
@@ -26,7 +26,7 @@ services that are:
 
 http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
 
-#### Vert.x Maven Project 
+=== Vert.x Maven Project 
 
 The **gateway-vertx** project has the following structure which shows the components of 
 the Vert.x project laid out in different subdirectories according to Maven best practices:
@@ -96,7 +96,7 @@ labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar
 This is an uber-jar with all the dependencies required packaged in the *jar* to enable running the 
 application with `*java -jar*`.
 
-#### Create an API Gateway
+=== Create an API Gateway
 
 In the previous labs, you have created two RESTful services: Catalog and Inventory. Instead of the 
 web frontend contacting each of these backend services, you can create an API Gateway which is an entry 
@@ -344,7 +344,7 @@ Build and package the *_Gateway Service_* using Maven by `*right clicking on gat
 
 image:{% image_path codeready-commands-build.png %}[Maven Build,600]
 
-#### Deploy Vert.x on OpenShift
+=== Deploy Vert.x on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 

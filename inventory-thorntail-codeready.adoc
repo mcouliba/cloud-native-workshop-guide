@@ -1,4 +1,4 @@
-## Enterprise Microservices with Thorntail
+== Enterprise Microservices with Thorntail
 
 *15 MINUTES PRACTICE*
 
@@ -6,7 +6,7 @@ In this lab you will learn about building microservices using Thorntail.
 
 image:{% image_path coolstore-arch-inventory-thorntail.png %}[CoolStore Architecture,400]
 
-#### What is Thorntail?
+=== What is Thorntail?
 
 image:{% image_path thorntail-logo.png %}[Thorntail, 400] image:{% image_path microprofile-logo.png %}[Microprofile, 400]
 
@@ -28,7 +28,7 @@ Since Thorntail is based on Java EE standards, it significantly simplifies refac
 existing Java EE applications to microservices and allows much of the existing code-base to be 
 reused in the new services.
 
-#### Thorntail Maven Project 
+=== Thorntail Maven Project 
 
 The `*inventory-thorntail*` project has the following structure which shows the components of 
 the Thorntail project laid out in different subdirectories according to Maven best practices:
@@ -77,7 +77,7 @@ Now let's write some code and create a domain model and a RESTful endpoint to cr
 
 image:{% image_path wfswarm-inventory-arch.png %}[Inventory RESTful Service,500]
 
-#### Creating a Domain Model
+=== Creating a Domain Model
 
 Create a new Java class named `*Inventory*` in `*com.redhat.cloudnative.inventory*` package with the below code and 
 following fields: `*itemId*` and `*quantity`
@@ -162,7 +162,7 @@ Examine `*src/main/resources/project-default.yml*` to see the database connectio
 An in-memory H2 database is used in this lab for local development and in the following 
 labs will be replaced with a PostgreSQL database. Be patient! More on that later.
 
-#### Creating a RESTful Service
+=== Creating a RESTful Service
 
 Thorntail uses JAX-RS standard for building REST services. In the project explorer in CodeReady Workspaces, right-click on **inventory-thorntail > src > main > java > com.redhat.cloudnative.inventory** and then on **New > Java Class**. Enter `*InventoryResource*` as the Java class name.
 
@@ -234,7 +234,7 @@ In CodeReady Workspaces, stop the Inventory service by clicking on the **run tho
 
 image:{% image_path thorntail-inventory-codeready-run-stop.png %}[Preview URL,600]
 
-#### Deploy Thorntail on OpenShift
+=== Deploy Thorntail on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 
