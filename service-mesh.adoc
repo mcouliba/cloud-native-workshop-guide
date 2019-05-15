@@ -189,7 +189,7 @@ https://www.kiali.io[Kiali^] works with Istio, in OpenShift or Kubernetes, to vi
 Kiali provides an interactive graph view of your namespace in real time, being able to display the interactions at several levels (applications, versions, workloads), with contextual information and charts on the selected graph node or edge.
 
 First, you need to access to Kiali. 
-`*Launch a browser and navigate to {{ KIALI_URL }})[Kiali Console^]*`. 
+`*Launch a browser and navigate to {{ KIALI_URL }}[Kiali Console^]*`. 
 You should see the Kiali console login screen.
 
 image:{% image_path kiali-login.png %}[Kiali- Log In,500]
