@@ -40,11 +40,11 @@ Once logged into CodeReady Workspaces, you can now create your workspace based o
 in your workspace. Stacks make it possible to recreate identical workspaces with all the tools and needed configuration
 on-demand. 
 
-`*Select the stack called 'Java Cloud-Native'*` and then `*click on 'CREATE & OPEN'*`. 
+`*Select the stack called 'Cloud-Native'*` and then `*click on 'CREATE & OPEN'*`. 
 
 image:{% image_path codeready-create-workspace.png %}[CodeReady Workspaces - Workspace,1000]
 
-WARNING: If you are *not* using the stack called 'Java Cloud-Native', we will not be able to complete the lab!
+WARNING: If you are *not* using the stack called 'Cloud-Native', we will not be able to complete the lab!
 
 It takes a little while for the workspace to be ready. When it's ready, you will see a fully functional CodeReady Workspaces IDE running in your browser.
 
