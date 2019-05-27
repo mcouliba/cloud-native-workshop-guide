@@ -1,6 +1,6 @@
 == Reactive Microservices with Eclipse Vert.x
 
-*15 MINUTES PRACTICE*
+*30 MINUTES PRACTICE*
 
 In this lab you will learn about Eclipse Vert.x and how you can 
 build microservices using reactive principles. During this lab you will 
