@@ -1,5 +1,7 @@
 ##  Managing Application Configuration
 
+*15 MINUTES PRACTICE*
+
 In this lab you will learn how to manage application configuration and how to provide environment 
 specific configuration to the services.
 
