@@ -185,7 +185,7 @@ IMPORTANT: Run this command inside the Inventory PostgreSQL container, after ope
 $ psql -U inventory -c "select * from inventory"
 
  itemid | quantity
-----
+ ----
  329299 |       35
  329199 |       12
  165613 |       45
@@ -288,7 +288,7 @@ IMPORTANT: Run this command inside the Inventory PostgreSQL container, after ope
 $ psql -U inventory -c 'select * from "INVENTORY"'
 
  ITEMID | QUANTITY
-----
+ ----
  329299 |       35
  329199 |       12
  165613 |       45
@@ -393,7 +393,7 @@ IMPORTANT: Run this command inside the Catalog PostgreSQL container, after openi
 $ psql -U catalog -c "select item_id, name, price from product"
 
  item_id |            name             | price
-----
+ ----
  329299  | Red Fedora                  | 34.99
  329199  | Forge Laptop Sticker        |   8.5
  165613  | Solid Performance Polo      |  17.8
