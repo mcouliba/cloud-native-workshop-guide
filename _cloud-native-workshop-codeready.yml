@@ -37,8 +37,7 @@ modules:
   - app-config
   - health
   - fault-tolerance-codeready
-  - continuous-delivery
-  - debug-codeready
+  - continuous-deliverys
   - service-mesh
   - abtesting
   - env-info
