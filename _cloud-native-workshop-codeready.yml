@@ -40,4 +40,5 @@ modules:
   - continuous-delivery
   - debug-codeready
   - service-mesh
+  - abtesting
   - env-info
