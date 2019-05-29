@@ -79,8 +79,10 @@ Enable remote debugging on Inventory by running the following command in the Cod
 ----
 $ oc rollout pause dc/inventory
 $ oc set env dc/inventory JAVA_DEBUG=true
+$ oc set env dc/inventory AB_PROMETHEUS_OFF-
 $ oc set probe dc/inventory --readiness --liveness --remove
 $ oc rollout resume dc/inventory
+$ oc rollout latest dc/inventory
 $ oc get pods -lapp=inventory,deploymentconfig=inventory
 NAME                 READY     STATUS    RESTARTS   AGE
 inventory-19-k54lj   1/1       Running   0          3m
