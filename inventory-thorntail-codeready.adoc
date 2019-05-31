@@ -308,7 +308,7 @@ or IP).
 * **Route**: **inventory** route registers the service on the built-in external load-balancer 
 and assigns a public DNS name to it so that it can be reached from outside OpenShift cluster.
 
-You can review the above resources in the OpenShift Web Console or using **oc describe** command:
+You can review the above resources in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] or using **oc describe** command:
 
 TIP:  **bc** is the short-form of **buildconfig** and can be interchangeably used 
 instead of it with the OpenShift CLI. The same goes for **is** instead 
@@ -322,7 +322,7 @@ $ oc describe svc inventory
 $ oc describe route inventory
 ----
 
-You can see the exposed DNS url for the Inventory service in the OpenShift Web Console or using 
+You can see the exposed DNS url for the Inventory service in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] or using 
 OpenShift CLI:
 
 ----
