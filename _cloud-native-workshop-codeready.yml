@@ -29,6 +29,7 @@ vars:
   
 modules:
   activate:
+  - introduction
   - getting-started-codeready
   - inventory-thorntail-codeready
   - catalog-spring-boot-codeready
@@ -37,7 +38,7 @@ modules:
   - app-config
   - health
   - fault-tolerance-codeready
-  - continuous-deliverys
+  - continuous-delivery
   - service-mesh
   - abtesting
   - env-info

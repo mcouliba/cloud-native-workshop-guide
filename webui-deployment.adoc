@@ -1,6 +1,6 @@
 == Web UI with Node.js and AngularJS 
 
-*5 MINUTES PRACTICE*
+_10 MINUTES PRACTICE_
 
 In this lab you will learn about Node.js and will deploy the Node.js and Angular-based 
 web frontend for the CoolStore online shop which uses the API Gateway services you deployed 
@@ -10,6 +10,8 @@ image:{% image_path coolstore-arch-webui-nodejs.png %}[API Gateway Pattern,400]
 
 === What is Node.js?
 
+[sidebar]
+--
 image:{% image_path nodejs-logo.png %}[Node.js, 400]
 
 https://nodejs.org/[Node.js^] is an open source, cross-platform runtime environment for developing server-side 
@@ -20,6 +22,7 @@ Web applications with many input/output operations, as well as for real-time web
 https://nodejs.org/[Node.js^] non-blocking architecture allows applications to process large number of 
 requests (tens of thousands) using a single thread which makes it desirable choice for building 
 scalable web applications.
+--
 
 === Deploy Web UI on OpenShift
 

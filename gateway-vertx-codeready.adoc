@@ -1,6 +1,6 @@
 == Reactive Microservices with Eclipse Vert.x
 
-*30 MINUTES PRACTICE*
+_45 MINUTES PRACTICE_
 
 In this lab you will learn about Eclipse Vert.x and how you can 
 build microservices using reactive principles. During this lab you will 
@@ -10,6 +10,8 @@ image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,4
 
 === What is Eclipse Vert.x?
 
+[sidebar]
+--
 image:{% image_path vertx-logo.png %}[Vertx, 400]
 
 http://vertx.io/[Eclipse Vert.x^] is a toolkit for building reactive applications on the Java Virtual Machine (JVM). Vert.x does not 
@@ -25,6 +27,7 @@ services that are:
 * *Message driven*: components interact using asynchronous message-passing
 
 http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
+--
 
 === Vert.x Maven Project 
 
@@ -45,7 +48,7 @@ image:{% image_path vertx-event-loop.png %}[Vert.x Event Loop,600]
 
 Although you can have multiple, there is currently only one Verticle created in the *_gateway-vertx_* project. 
 
-Examine *_GatewayVerticle.java_* class in the *_com.redhat.cloudnative.gateway_* package in the **src** directory.
+`*Examine 'GatewayVerticle' class*` in the *_com.redhat.cloudnative.gateway_* package in the **src** directory.
 
 [source,java]
 .GatewayVerticle.java
@@ -58,25 +61,23 @@ import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
 
-public class GatewayVerticle extends AbstractVerticle {
+public class GatewayVerticle extends AbstractVerticle { // <1>
     @Override
-    public void start(Future<Void> future) {
-        Router router = Router.router(vertx);
+    public void start(Future<Void> future) { // <2>
+        Router router = Router.router(vertx); // <3>
 
-        router.get("/*").handler(StaticHandler.create("assets"));
+        router.get("/*").handler(StaticHandler.create("assets")); // <4>
 
         vertx.createHttpServer().requestHandler(router)
-            .listen(Integer.getInteger("http.port", 8080));
+            .listen(Integer.getInteger("http.port", 8080)); // <5>
     }
 }
 ----
-
-Here is what happens in the above code:
-
-1. A Verticle is created by extending from *_AbstractVerticle_* class
-2. *_Router_* is retrieved for mapping the REST endpoints
-3. A REST endpoint is created for **/** to return a static HTML page **assets/index.html**
-4. An HTTP Server is created which listens on port **8080**
+<1> A Verticle is created by extending from *_AbstractVerticle_* class
+<2> The *_start()_* method creates an HTTP server
+<3> *_Router_* is retrieved for mapping the REST endpoints
+<4> A REST endpoint is created for **/** to return a static HTML page **assets/index.html**
+<5> An HTTP Server is created which listens on port **8080**
 
 You can use Maven to make sure the skeleton project builds successfully. You should get a **BUILD SUCCESS** message 
 in the build logs, otherwise the build has failed.
@@ -147,9 +148,9 @@ public class GatewayVerticle extends AbstractVerticle {
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
         router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
-        router.get("/api/products").handler(this::products);
+        router.get("/api/products").handler(this::products); // <1>
 
-        ServiceDiscovery.create(vertx, discovery -> {
+        ServiceDiscovery.create(vertx, discovery -> { // <2>
             // Catalog lookup
             Single<WebClient> catalogDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
                 rec -> rec.getName().equals("catalog"))
@@ -176,7 +177,7 @@ public class GatewayVerticle extends AbstractVerticle {
         });
     }
 
-    private void products(RoutingContext rc) {
+    private void products(RoutingContext rc) { // <3>
         // Retrieve catalog
         catalog
             .get("/api/catalog")
@@ -205,7 +206,7 @@ public class GatewayVerticle extends AbstractVerticle {
             );
     }
 
-    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) {
+    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) { // <4>
         // Retrieve the inventory for a given product
         return inventory
             .get("/api/inventory/" + product.getString("itemId"))
@@ -223,124 +224,29 @@ public class GatewayVerticle extends AbstractVerticle {
     }
 }
 ----
-
-Let's break down what happens in the above code. The *_start()_* method creates an HTTP 
-server and a REST mapping to map **/api/products** to the *_products()_* method. 
-
-Vert.x provides http://vertx.io/docs/vertx-service-discovery/java[built-in service discovery^] 
+<1> A REST mapping to map **/api/products** to the *_products()_* method
+<2> Vert.x provides http://vertx.io/docs/vertx-service-discovery/java[built-in service discovery^] 
 for finding where dependent services are deployed 
 and accessing their endpoints. Vert.x service discovery can be seamlessly integrated with external 
 service discovery mechanisms provided by OpenShift, Kubernetes, Consul, Redis, etc.
-
 In this lab, since you will deploy the API Gateway on OpenShift, the OpenShift service discovery 
 bridge is used to automatically import OpenShift services into the Vert.x application as they 
 get deployed and undeployed. Since you also want to test the API Gateway locally, there is an 
-***onErrorReturn()_* method clause in the service lookup to fallback on a local service for Inventory 
-and Catalog REST APIs. 
-
-[source,java]
-----
-public void start() {
-    Router router = Router.router(vertx);
-    router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
-    router.get("/*").handler(StaticHandler.create("assets"));
-    router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
-    router.get("/api/products").handler(this::products);
-
-    ServiceDiscovery.create(vertx, discovery -> {
-        // Catalog lookup
-        Single<WebClient> catalogDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-            rec -> rec.getName().equals("catalog"))
-            .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                .setDefaultHost(System.getProperty("catalog.api.host", "localhost"))
-                .setDefaultPort(Integer.getInteger("catalog.api.port", 9000))));
-
-        // Inventory lookup
-        Single<WebClient> inventoryDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-            rec -> rec.getName().equals("inventory"))
-            .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                .setDefaultHost(System.getProperty("inventory.api.host", "localhost"))
-                .setDefaultPort(Integer.getInteger("inventory.api.port", 9001))));
-
-        // Zip all 3 requests
-        Single.zip(catalogDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
-            // When everything is done
-            catalog = c;
-            inventory = i;
-            return vertx.createHttpServer()
-                .requestHandler(router)
-                .listen(Integer.getInteger("http.port", 8080));
-        }).subscribe();
-    });
-}
-----
-
-The *_products()_* method invokes the Catalog REST endpoint and retrieves the products. It then 
+*_onErrorReturn()_* method clause in the service lookup to fallback on a local service for Inventory 
+and Catalog REST APIs.
+<3> The *_products()_* method invokes the Catalog REST endpoint and retrieves the products. It then 
 iterates over the retrieved products and for each product invokes the 
 Inventory REST endpoint to get the inventory status and enrich the product data with availability 
-info using the **getAvailabilityFromInventory()** method.
-
-Note that instead of making blocking calls to the Catalog and Inventory REST APIs, all calls 
+info using the **getAvailabilityFromInventory()** method. Note that instead of making blocking calls 
+to the Catalog and Inventory REST APIs, all calls 
 are non-blocking and handled using http://vertx.io/docs/vertx-rx/java[RxJava^]. Due to its non-blocking 
 nature, the *_product()_* method can immediately return without waiting for the Catalog and Inventory 
 REST invocations to complete and whenever the result of the REST calls is ready, the result 
 will be acted upon and update the response which is then sent back to the client.
+<4> The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the 
+Inventory REST endpoint and retrieves the inventory.
 
-[source,java]
-----
-private void products(RoutingContext rc) {
-    // Retrieve catalog
-    catalog
-        .get("/api/catalog")
-        .as(BodyCodec.jsonArray())
-        .expect(ResponsePredicate.SC_OK)
-        .rxSend()
-        .map(resp -> {
-            // Map the response to a list of JSON object
-            List<JsonObject> listOfProducts = new ArrayList<>();
-            for (Object product : resp.body()) {
-                listOfProducts.add((JsonObject)product);
-            }
-            return listOfProducts;
-        })
-        .flatMap(products -> {
-            // For each item from the catalog, invoke the inventory service
-            // and create a JsonArray containing all the results
-            return Observable.fromIterable(products)
-                .flatMapSingle(this::getAvailabilityFromInventory)
-                .collect(JsonArray::new, JsonArray::add);
-            }
-        )
-        .subscribe(
-            list -> rc.response().end(list.encodePrettily()),
-            error -> rc.response().setStatusCode(500).end(new JsonObject().put("error", error.getMessage()).toString())
-        );
-}
-----
-
-The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the Inventory REST endpoint and retrieves the inventory.
-
-[source,java]
-----
-private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) {
-    // Retrieve the inventory for a given product
-    return inventory
-        .get("/api/inventory/" + product.getString("itemId"))
-        .as(BodyCodec.jsonObject())
-        .rxSend()
-        .map(resp -> {
-            if (resp.statusCode() != 200) {
-                LOG.warn("Inventory error for {}: status code {}",
-                    product.getString("itemId"), resp.statusCode());
-                return product.copy();
-            }
-            return product.copy().put("availability",
-                new JsonObject().put("quantity", resp.body().getInteger("quantity")));
-        });
-}
-----
-
-Build and package the *_Gateway Service_* using Maven by `*right clicking on gateway-vertx*` project in the project explorer then, `*click on 'Commands > Build > build'*`
+Build and package the *_Gateway Service_* using Maven by `*right-clicking on gateway-vertx*` project in the project explorer then, `*click on 'Commands > Build > build'*`
 
 image:{% image_path codeready-commands-build.png %}[Maven Build,600]
 

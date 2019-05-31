@@ -1,5 +1,7 @@
 == Deploying the API Gateway
 
+_10 MINUTES PRACTICE_
+
 As explained in the introduction at the core of the Cool Store Portal architecture there is a Gateway component.
 
 As we have done previously for the sake of saving time we're going to deploy our 'Gateway' service instead of coding it. But before we actually deploy the service we're going to explain briefly some concepts.
@@ -12,9 +14,15 @@ Our **'API Gateway'** service needed to be easy to scale, light and responsive, 
 
 === What is Eclipse Vert.x?
 
-http://vertx.io) is a toolkit for building reactive applications on the Java Virtual Machine (JVM[Eclipse Vert.x^]. Vert.x does not impose a specific framework or packaging model and can be used within your existing applications and frameworks in order to add reactive functionality by just adding the Vert.x jar files to the application classpath.
+[sidebar]
+--
+image:{% image_path vertx-logo.png %}[Vertx, 400]
 
-Vert.x enables building reactive systems as defined by http://www.reactivemanifesto.org[The Reactive Manifesto^] and build 
+http://vertx.io/[Eclipse Vert.x^] is a toolkit for building reactive applications on the Java Virtual Machine (JVM). Vert.x does not 
+impose a specific framework or packaging model and can be used within your existing applications and frameworks 
+in order to add reactive functionality by just adding the Vert.x jar files to the application classpath.
+
+http://vertx.io/[Eclipse Vert.x^] enables building reactive systems as defined by http://www.reactivemanifesto.org[The Reactive Manifesto^] and build 
 services that are:
 
 * *Responsive*: to handle requests in a reasonable time
@@ -22,7 +30,8 @@ services that are:
 * *Elastic*: to stay responsive under various loads and be able to scale up and down
 * *Message driven*: components interact using asynchronous message-passing
 
-Vert.x is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
+http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
+--
 
 === Vert.x Maven Project 
 
@@ -45,27 +54,7 @@ and accessing their endpoints. This service discovery can seamlessly integrated 
 service discovery mechanisms provided by OpenShift, Kubernetes, Consul, Redis, etc.
 
 http://vertx.io/docs/vertx-service-discovery/java[Vert.x service discovery^] integrates into OpenShift service discovery via OpenShift 
-REST API and imports available services to make them available to the Vert.x application. Security 
-in OpenShift comes first and therefore accessing the OpenShift REST API requires the user or the 
-system (Vert.x in this case) to have sufficient permissions to do so. All containers in 
-OpenShift run with a `*serviceaccount*` (by default, the project `*default*` service account) which can 
-be used to grant permissions for operations like accessing the OpenShift REST API. You can read 
-more about service accounts in the {{OPENSHIFT_DOCS_BASE}}/dev_guide/service_accounts.html[OpenShift Documentation^] and this 
-https://blog.openshift.com/understanding-service-accounts-sccs/#_service_accounts[blog post^]
-
-Grant permission to the API Gateway to be able to access OpenShift REST API and discover services.
-
-IMPORTANT: Make sure to replace the project name with your own unique project name
-
-----
-$ oc policy add-role-to-user view -n {{COOLSTORE_PROJECT}} -z default
-----
-
-OpenShift {{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#source-build[Source-to-Image (S2I)^] 
-feature can be used to build a container image from a git repository. OpenShift S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container image of the 
-Inventory service by building the WildFly Swam uber-jar from source code (build strategy **'Source'**), using Maven, to the OpenShift platform.
-
-Vert.x service discovery integrates into OpenShift service discovery via OpenShift REST API and imports available services to make them available to the Vert.x application. Security in OpenShift comes first and therefore accessing the OpenShift REST API requires the user or the system (Vert.x in this case) to have sufficient permissions to do so. All containers in OpenShift run with a `*serviceaccount*` (by default, the project `*default*` service account) which can be used to grant permissions for operations like accessing the OpenShift REST API. You can read more about service accounts in the https://blog.openshift.com/understanding-service-accounts-sccs/#_service_accounts[OpenShift Documentation]({{OPENSHIFT_DOCS_BASE}}/dev_guide/service_accounts.html) and this [blog post^]
+REST API and imports available services to make them available to the Vert.x application.
 
 Next commands are going to deploy our API Gateway service.
 
@@ -94,13 +83,15 @@ inventory   inventory-{{COOLSTORE_PROJECT}}-{{OPENSHIFT_USER}}.roadshow.openshif
 gateway     gateway-{{COOLSTORE_PROJECT}}-{{OPENSHIFT_USER}}.roadshow.openshiftapps.com               gateway     8080                     None
 ----
 
-Copy the route url for API Gateway and verify the API Gateway service works using `*curl`:
 
-IMPORTANT: The route urls in your project would be different from the ones in this lab guide! Use the ones from your project.
+`*Click on the OpenShift Route of _'Gateway Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].
 
+image:{% image_path gateway-service.png %}[Gateway Service,500]
+
+Then `*click on 'Test it'*`. You should have the following output:
+
+[source,json]
 ----
-$ curl http://{{API_GATEWAY_ROUTE_HOST}}/api/products
-
 [ {
   "itemId" : "329299",
   "name" : "Red Fedora",
@@ -114,6 +105,7 @@ $ curl http://{{API_GATEWAY_ROUTE_HOST}}/api/products
 ]
 ----
 
-As mentioned earlier, Vert.x built-in service discovery is integrated with OpenShift service discovery to lookup the Catalog and Inventory APIs.
+As mentioned earlier, Vert.x built-in service discovery is integrated with OpenShift service 
+discovery to lookup the Catalog and Inventory APIs.
 
 Well done! You are ready to move on to the next lab.

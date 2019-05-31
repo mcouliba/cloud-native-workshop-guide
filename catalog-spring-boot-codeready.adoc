@@ -1,6 +1,6 @@
 == Microservices with Spring Boot
 
-*30 MINUTES PRACTICE*
+_45 MINUTES PRACTICE_
 
 In this lab you will learn about Spring Boot and how you can build microservices 
 using Spring Boot and JBoss technologies. During this lab, you will create a REST API for 
@@ -10,15 +10,18 @@ image:{% image_path coolstore-arch-catalog-spring-boot.png %}[CoolStore Architec
 
 === What is Spring Boot?
 
+[sidebar]
+--
 image:{% image_path spring-boot-logo.png %}[Spring Boot, 400]
 
 Spring Boot is an opinionated framework that makes it easy to create stand-alone Spring based 
 applications with embedded web containers such as Tomcat (or JBoss Web Server), Jetty and Undertow 
-that you can run directly on the JVM using `java -jar`. Spring Boot also allows producing a war 
+that you can run directly on the JVM using **java -jar**. Spring Boot also allows producing a war 
 file that can be deployed on stand-alone web containers.
 
 The opinionated approach means many choices about Spring platform and third-party libraries 
 are already made by Spring Boot so that you can get started with minimum effort and configuration.
+--
 
 === Spring Boot Maven Project 
 
@@ -77,7 +80,7 @@ labs/catalog-spring-boot/target/catalog-1.0-SNAPSHOT.jar
 ----
 
 This is an uber-jar with all the dependencies required packaged in the ***jar*** to enable running the 
-application with `*java -jar`.
+application with **java -jar**.
 
 Now that the project is ready, let's get coding and create a domain model, data repository, and a  
 RESTful endpoint to create the Catalog service:
@@ -105,11 +108,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(name = "PRODUCT", uniqueConstraints = @UniqueConstraint(columnNames = "itemId"))
+@Entity // <1>
+@Table(name = "PRODUCT", uniqueConstraints = @UniqueConstraint(columnNames = "itemId")) // <2>
 public class Product implements Serializable {
   
-  @Id
+  @Id // <3>
   private String itemId;
   
   private String name;
@@ -159,10 +162,9 @@ public class Product implements Serializable {
   }
 }
 ----
-
-Review the ***Product*** domain model and note the JPA annotations on this class. ***@Entity*** marks the 
-class as a JPA entity, ***@Table*** customizes the table creation process by defining a table 
-name and database constraint and ***@Id*** marks the primary key for the table
+<1> **@Entity** marks the class as a JPA entity
+<2> **@Table** customizes the table creation process by defining a table name and database constraint
+<3> **@Id** marks the primary key for the table
 
 === Create a Data Repository
 
@@ -242,7 +244,7 @@ test the endpoint. In CodeReady Workspaces, `*click on the run icon and then on 
 
 image:{% image_path run-icon-springboot.png %}[Run Icon - Spring Boot,200]
 
-TIP: You can also run the inventory service in CodeReady Workspaces using the *_Commands Palette_* and then **RUN > spring-boot:run**
+TIP: You can also run the ***Catalog Service*** in CodeReady Workspaces using the *_Commands Palette_* and then **RUN > spring-boot:run**
  
 When you see **Started CatalogApplication** in the logs, you can access the 
 Catalog REST API. Let’s test it out using `*curl*` in a new terminal window:
@@ -282,7 +284,7 @@ able to communicate with the OpenShift platform using the REST endpoints in orde
 allowing to build a project, deploy it and finally launch a docker process as a pod.
 
 To build and deploy the **Catalog Service** on OpenShift using the *fabric8* maven plugin, 
-which is already configured in CodeReady Workspaces, `*right click on catalog-spring-boot*` project in the project explorer then, `*click on Commands > Deploy > fabric8:deploy`
+which is already configured in CodeReady Workspaces, `*right click on catalog-spring-boot*` project in the project explorer then, `*click on Commands > Deploy > fabric8:deploy*`
 
 image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
 
